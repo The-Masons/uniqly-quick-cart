@@ -30,7 +30,8 @@
   },
   "devDependencies": {
     "jest": "^30.0.4",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "rollup": "^4.45.1"
   },
   "version": "1.0.0",
   "main": "server/index.js",
