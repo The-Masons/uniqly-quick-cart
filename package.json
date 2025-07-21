@@ -23,14 +23,14 @@
     ]
   },
   "dependencies": {
-    "pg": "^7.4.1",
-    "pg-pool": "^2.0.3",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1"
+    "pg": "^8.16.3",
+    "pg-pool": "^3.10.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "jest": "^22.4.3",
-    "nodemon": "^1.17.3",
+    "jest": "^30.0.4",
+    "nodemon": "^3.1.10"
   },
   "version": "1.0.0",
   "main": "server/index.js",
