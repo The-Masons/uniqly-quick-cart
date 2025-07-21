@@ -36,6 +36,8 @@
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
     "@rollup/plugin-babel": "^6.0.4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
     "jest": "^30.0.4",
     "nodemon": "^3.1.10",
     "rollup": "^4.45.1"
