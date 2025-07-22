@@ -1,9 +1,10 @@
-const express = require('express');
+const fastify = require('fastify')({
+  logger: true,
+});
 const path = require('path');
 const db = require('../db/index');
 const mockData = require('../data/init');
 
-const app = express();
 const hostname = `http://${process.env.HOSTNAME}` || 'http://localhost';
 const port = process.env.PORT || 3001;
 
@@ -15,17 +16,33 @@ const dbSeeder = () => {
   }
 };
 
-app.use(express.static(path.join(__dirname, '/../client')));
+fastify.register(require('@fastify/static'), {
+  root: path.join(__dirname, '/../client')},
+  prefix: '/../client/',
+);
 
-app.get('/product/:productId', (req, res) => {
-  res.set({
-    'Access-Control-Allow-Origin': hostname,
-    'Content-Type': 'text/html',
-  });
-  res.status(302).sendFile(path.join(__dirname, '/../client/index.html'));
+fastify.get('/', (req, res) => {
+  res
+    .code(302)
+    .headers({
+      'Access-Control-Allow-Origin': hostname,
+      'Content-Type': 'application/json',
+      'Location': '/product/0',
+    })
+    .redirect('/product/0');
 });
 
-app.get('/product/:productId/sizes_qtys', (req, res) => {
+fastify.get('/product/:productId', (req, res) => {
+  res
+    .code(200)
+    .headers({
+      'Access-Control-Allow-Origin': hostname,
+      'Content-Type': 'application/json',
+    })
+    .sendFile(path.join(__dirname, 'index.html'));
+});
+
+fastify.get('/product/:productId/sizes_qtys', (req, res) => {
   db.query(`
     SELECT sizes.size_name, products_sizes.quantity FROM
       (sizes INNER JOIN products_sizes ON sizes.size_id = products_sizes.size_id)
@@ -34,32 +51,39 @@ app.get('/product/:productId/sizes_qtys', (req, res) => {
     if (err) {
       console.log('Seeding database...');
       if (err.code === '42P01') {
-        res.set({
-          'Access-Control-Allow-Origin': hostname,
-          'Content-Type': 'application/json',
-        });
-        res.status(200).send([{ size_name: 'Database Seeding...', quantity: 0 }]);
+        res.set();
+        res
+          .code(200)
+          .headers({
+            'Access-Control-Allow-Origin': hostname,
+            'Content-Type': 'application/json',
+          })
+          .send([{ size_name: 'Database Seeding...', quantity: 0 }]);
         dbSeeder();
       } else {
-        console.log(err);
-        res.set({
-          'Access-Control-Allow-Origin': hostname,
-          'Content-Type': 'application/json',
-        });
-        res.status(500).send();
+        console.error(err);
+        res
+          .code(500)
+          .headers({
+            'Access-Control-Allow-Origin': hostname,
+            'Content-Type': 'application/json',
+          })
+          .send(err);
       }
     } else {
       seederCalled = false;
-      res.set({
-        'Access-Control-Allow-Origin': hostname,
-        'Content-Type': 'application/json',
-      });
-      res.status(200).send(data);
+      res
+        .code(200)
+        .headers({
+          'Access-Control-Allow-Origin': hostname,
+          'Content-Type': 'application/json',
+        })
+        .send(data);
     }
   });
 });
 
-app.get('/product/:productId/addtocart', (req, res) => {
+fastify.get('/product/:productId/addtocart', (req, res) => {
   db.query(`
     SELECT images.img_url, names.name_name, colors.color_name, products.price FROM
       (((products INNER JOIN colors ON products.color_id = colors.color_id)
@@ -74,27 +98,41 @@ app.get('/product/:productId/addtocart', (req, res) => {
           'Access-Control-Allow-Origin': hostname,
           'Content-Type': 'application/json',
         });
-        res.status(200).send([{ size_name: 'Database Seeding...', quantity: 0 }]);
+        res
+          .code(200)
+          .headers({
+            'Access-Control-Allow-Origin': hostname,
+            'Content-Type': 'application/json',
+          })
+          .send([{ size_name: 'Database Seeding...', quantity: 0 }]);
         dbSeeder();
       } else {
-        console.log(err);
-        res.set({
-          'Access-Control-Allow-Origin': hostname,
-          'Content-Type': 'application/json',
-        });
-        res.status(500).send();
+        console.error(err);
+        res
+          .code(500)
+          .headers({
+            'Access-Control-Allow-Origin': hostname,
+            'Content-Type': 'application/json',
+          })
+          .send(err);
       }
     } else {
       seederCalled = false;
-      res.set({
-        'Access-Control-Allow-Origin': hostname,
-        'Content-Type': 'application/json',
-      });
-      res.status(200).send(data);
+      res
+        .code(200)
+        .headers({
+          'Access-Control-Allow-Origin': hostname,
+          'Content-Type': 'application/json',
+        })
+        .send(data);
     }
   });
 });
 
-app.listen(port, () => {
-  console.log(`App listening on ${hostname}:${port}`);
+fastify.listen(port, err => {
+  if (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+  fastify.log.info(`App listening on ${hostname}:${port}`);
 });
