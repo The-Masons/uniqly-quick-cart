@@ -18,4 +18,4 @@ export default function miniCartReducer(state, action) {
 		default:
 			break;
 	}
-}
+};
