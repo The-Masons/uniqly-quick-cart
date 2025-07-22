@@ -8,8 +8,7 @@
   },
   "scripts": {
     "server-dev": "nodemon server/index.js",
-    "react-dev": "webpack -d --watch",
-    "react-prod": "webpack -d",
+    "build": "rollup -c -o client/bundle.js",
     "lint": "eslint ./",
     "test": "jest --coverage",
     "start": "node server/index.js"
@@ -17,9 +16,6 @@
   "jest": {
     "setupFiles": [
       "./test/jestsetup.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
     ]
   },
   "dependencies": {
