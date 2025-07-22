@@ -104,14 +104,14 @@ export default function MiniCart (props) {
   return (
     <div className="minicart">
       <div className="minicart-icon"
-          onMouseEnter={this.showCart}
-          onMouseLeave={this.hideCart.bind(null, false)}>
-        <span>{this.props.cartSize}</span>
+          onMouseEnter={showCart}
+          onMouseLeave={hideCart.bind(null, false)}>
+        <span>{props.cartSize}</span>
       </div>
-      <div className={this.state.viewClass}
-        onMouseEnter={this.showCart}
-        onMouseLeave={this.hideCart.bind(null, false)}>
-        {this.generateMiniCart(this.props.cartSize)}
+      <div className={state.viewClass}
+        onMouseEnter={showCart}
+        onMouseLeave={hideCart.bind(null, false)}>
+        {generateMiniCart(props.cartSize)}
       </div>
     </div>
   );
