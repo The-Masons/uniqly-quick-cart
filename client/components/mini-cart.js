@@ -18,10 +18,16 @@ export default function MiniCart (props) {
     hideCart(false);
   }, [state.viewClass]);
 
-  const stopHiding = () => {
+  const showCart = () => {
     if (state.timeoutID) {
       clearTimeout(state.timeoutID);
     }
+
+    dispatch({
+      type: 'show',
+      viewClass: state.viewClass.replace(' hidden', ''),
+      timeoutID: '',
+    });
   };
 
   const hideCart = isImmediate => {
@@ -33,13 +39,13 @@ export default function MiniCart (props) {
     if (isImmediate) {
       dispatch({
         type: 'hide_immediate',
-        viewClass: `${viewClass} hidden`,
+        viewClass: `${state.viewClass} hidden`,
         timeoutID: '',
       });
     } else {
       const newTimeoutID = setTimeout(() => dispatch({
         type: 'hide_immediate',
-        viewClass: `${viewClass} hidden`,
+        viewClass: `${state.viewClass} hidden`,
         timeoutID: '',
       }), 5000);
 

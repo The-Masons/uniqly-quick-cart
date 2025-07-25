@@ -1,5 +1,10 @@
 export default function miniCartReducer(state, action) {
 	switch (action.type) {
+		case 'show':
+			return {
+	      viewClass: action.viewClass,
+	      timeoutID: action.timeoutID,
+	    };
 		case 'item_added':
 			return {
 				viewClass: action.viewClass,
