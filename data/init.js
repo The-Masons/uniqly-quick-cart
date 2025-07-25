@@ -1,9 +1,10 @@
-const Pool = require('pg-pool');
+const Pool = require('pg').Pool;
 
 const pool = new Pool({
   user: 'postgres',
   host: process.env.PGHOST,
   database: process.env.DBNAME,
+  user: process.env.PGUSER,
   password: process.env.PGPASSWORD,
   port: process.env.PGPORT,
 });
@@ -145,7 +146,7 @@ const populateImages = (numRows) => {
     for (let i = 0; i < numRows; i += 1) {
       promises.push(pool.connect()
         .then(client =>
-          client.query(queryText, [i, 'http://placecorgi.com/250', i, true])
+          client.query(queryText, [i, 'https://placehold.co/250', i, true])
             .then(() => client.release())
             .catch((err) => {
               client.release();
