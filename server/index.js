@@ -22,12 +22,31 @@ fastify.register(require('@fastify/static'), {
   prefix: '/../public/',
 });
 
+fastify.get('/styles.css', (req, res) => {
+  res
+    .code(200)
+    .headers({
+      'Access-Control-Allow-Origin': hostname,
+      'Content-Type': 'test/css',
+    })
+    .sendFile('styles.css');
+});
+
+fastify.get('/bundle.js', (req, res) => {
+  res
+    .code(200)
+    .headers({
+      'Access-Control-Allow-Origin': hostname,
+      'Content-Type': 'test/javascript',
+    })
+    .sendFile('bundle.js');
+});
+
 fastify.get('/', (req, res) => {
   res
     .code(302)
     .headers({
       'Access-Control-Allow-Origin': hostname,
-      'Content-Type': 'application/json',
       'Location': '/product/0',
     })
     .redirect('/product/0');
@@ -38,9 +57,9 @@ fastify.get('/product/:productId', (req, res) => {
     .code(200)
     .headers({
       'Access-Control-Allow-Origin': hostname,
-      'Content-Type': 'application/json',
+      'Content-Type': 'text/html',
     })
-    .sendFile(path.join(__dirname, 'index.html'));
+    .sendFile('index.html');
 });
 
 fastify.get('/product/:productId/sizes_qtys', (req, res) => {
