@@ -18,9 +18,9 @@ const dbSeeder = () => {
 };
 
 fastify.register(require('@fastify/static'), {
-  root: path.join(__dirname, '/../client')},
-  prefix: '/../client/',
-);
+  root: path.join(__dirname, '/../public'),
+  prefix: '/../public/',
+});
 
 fastify.get('/', (req, res) => {
   res
@@ -130,7 +130,7 @@ fastify.get('/product/:productId/addtocart', (req, res) => {
   });
 });
 
-fastify.listen(port, err => {
+fastify.listen({ port }, err => {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
