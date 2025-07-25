@@ -14,6 +14,8 @@ export default function QuickCart (props) {
     cart: {},
     cartOrder: [],
     cartSize: 0,
+    viewClass: 'minicart-view empty hidden',
+    timeoutID: '',
   });
 
   // Fetch item info from the server
@@ -134,6 +136,7 @@ export default function QuickCart (props) {
               cart: newCart,
               cartSize: newCartSize,
               cartOrder: newOrder,
+              viewClass: 'minicart-view',
             });
           }
         } else {
@@ -151,6 +154,44 @@ export default function QuickCart (props) {
       });
   }
 
+  const showCart = () => {
+    if (state.timeoutID) {
+      clearTimeout(state.timeoutID);
+    }
+
+    dispatch({
+      type: 'show_mini_cart',
+      viewClass: state.viewClass.replace(' hidden', ''),
+      timeoutID: '',
+    });
+  };
+
+  const hideCart = isImmediate => {
+    // Reset the timeout on consecutive calls
+    if (state.timeoutID) {
+      clearTimeout(state.timeoutID);
+    }
+
+    if (isImmediate) {
+      dispatch({
+        type: 'hide_immediate',
+        viewClass: `${state.viewClass} hidden`,
+        timeoutID: '',
+      });
+    } else {
+      const newTimeoutID = setTimeout(() => dispatch({
+        type: 'hide_immediate',
+        viewClass: `${state.viewClass} hidden`,
+        timeoutID: '',
+      }), 5000);
+
+      dispatch({
+        type: 'hide_timeout',
+        timeoutID: newTimeoutID,
+      });
+    }
+  };
+
   return(
     <>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
@@ -159,6 +200,9 @@ export default function QuickCart (props) {
           cartSize={state.cartSize}
           cartOrder={state.cartOrder}
           getNewPage={getSizesQtys}
+          showCart={showCart}
+          hideCart={hideCart}
+          viewClass={state.viewClass}
         />
       </ErrorBoundary>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>

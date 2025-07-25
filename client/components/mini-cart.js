@@ -1,60 +1,9 @@
-import { useEffect, useReducer } from 'react';
-import miniCartReducer from '../reducers/mini-cart-reducer.js';
+import { useEffect } from 'react';
 
 export default function MiniCart (props) {
-  const [state, dispatch] = useReducer(miniCartReducer, {
-    viewClass: props.cartSize > 0 ? 'minicart-view hidden' : 'minicart-view empty hidden',
-    timeoutID: '',
-  });
-
-  // Show cart when an item is added and start a timeout to hide it
   useEffect(() => {
-    dispatch({
-      type: 'item_added',
-      viewClass: 'minicart-view',
-    });
-  }, [props.cartSize]);
-  useEffect(() => {
-    hideCart(false);
-  }, [state.viewClass]);
-
-  const showCart = () => {
-    if (state.timeoutID) {
-      clearTimeout(state.timeoutID);
-    }
-
-    dispatch({
-      type: 'show',
-      viewClass: state.viewClass.replace(' hidden', ''),
-      timeoutID: '',
-    });
-  };
-
-  const hideCart = isImmediate => {
-    // Reset the timeout on consecutive calls
-    if (state.timeoutID) {
-      clearTimeout(state.timeoutID);
-    }
-
-    if (isImmediate) {
-      dispatch({
-        type: 'hide_immediate',
-        viewClass: `${state.viewClass} hidden`,
-        timeoutID: '',
-      });
-    } else {
-      const newTimeoutID = setTimeout(() => dispatch({
-        type: 'hide_immediate',
-        viewClass: `${state.viewClass} hidden`,
-        timeoutID: '',
-      }), 5000);
-
-      dispatch({
-        type: 'hide_timeout',
-        timeoutID: newTimeoutID,
-      });
-    }
-  };
+    props.hideCart(false);
+  }, [props.viewClass]);
 
   const calculateTotal = () => {
     let sum = 0;
@@ -100,7 +49,7 @@ export default function MiniCart (props) {
           <button className="minicart-view-cart-btn">VIEW BAG</button>
           <button className="minicart-checkout-btn">CHECKOUT</button>
         </div>,
-        <span className="minicart-close-btn" key="closeBag" onClick={hideCart.bind(null, true)}>CLOSE BAG</span>,
+        <span className="minicart-close-btn" key="closeBag" onClick={props.hideCart.bind(null, true)}>CLOSE BAG</span>,
       ];
     } else {
       return 'YOUR BAG IS EMPTY';
@@ -110,13 +59,13 @@ export default function MiniCart (props) {
   return (
     <div className="minicart">
       <div className="minicart-icon"
-          onMouseEnter={showCart}
-          onMouseLeave={hideCart.bind(null, false)}>
+          onMouseEnter={props.showCart}
+          onMouseLeave={props.hideCart.bind(null, false)}>
         <span>{props.cartSize}</span>
       </div>
-      <div className={state.viewClass}
-        onMouseEnter={showCart}
-        onMouseLeave={hideCart.bind(null, false)}>
+      <div className={props.viewClass}
+        onMouseEnter={props.showCart}
+        onMouseLeave={props.hideCart.bind(null, false)}>
         {generateMiniCart(props.cartSize)}
       </div>
     </div>

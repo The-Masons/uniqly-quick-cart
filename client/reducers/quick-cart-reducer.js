@@ -7,6 +7,8 @@ export default function quickCartReducer(state, action) {
         cart: state.cart,
 		    cartOrder: state.cartOrder,
 		    cartSize: state.cartSize,
+		    viewClass: state.viewClass,
+   		  timeoutID: state.timeoutID,
 			};
 		case 'update_qtys':
 			return {
@@ -15,6 +17,8 @@ export default function quickCartReducer(state, action) {
         cart: action.cart,
 		    cartOrder: state.cartOrder,
 		    cartSize: action.cartSize,
+		    viewClass: state.viewClass,
+   		  timeoutID: state.timeoutID,
 			};
 		case 'add_item':
 			return {
@@ -23,6 +27,38 @@ export default function quickCartReducer(state, action) {
         cart: action.cart,
 		    cartOrder: action.cartOrder,
 		    cartSize: action.cartSize,
+		    viewClass: action.viewClass,
+   		  timeoutID: state.timeoutID,
+			};
+		case 'show_mini_cart':
+			return {
+				sizes: state.sizes,
+        quantities: state.quantities,
+        cart: state.cart,
+		    cartOrder: state.cartOrder,
+		    cartSize: state.cartSize,
+		    viewClass: action.viewClass,
+   		  timeoutID: action.timeoutID,
+			};
+		case 'hide_timeout':
+			return {
+				sizes: state.sizes,
+        quantities: state.quantities,
+        cart: state.cart,
+		    cartOrder: state.cartOrder,
+		    cartSize: state.cartSize,
+		    viewClass: state.viewClass,
+   		  timeoutID: action.timeoutID,
+			};
+		case 'hide_immediate':
+			return {
+				sizes: state.sizes,
+        quantities: state.quantities,
+        cart: state.cart,
+		    cartOrder: state.cartOrder,
+		    cartSize: state.cartSize,
+		    viewClass: action.viewClass,
+   		  timeoutID: action.timeoutID,
 			};
 		case 'error_fetch':
 		case 'error_server':
@@ -33,6 +69,8 @@ export default function quickCartReducer(state, action) {
         cart: state.cart,
 		    cartOrder: state.cartOrder,
 		    cartSize: state.cartSize,
+		    viewClass: state.viewClass,
+   		  timeoutID: state.timeoutID,
 			};
 		default:
 			break;
