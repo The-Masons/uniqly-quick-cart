@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useReducer } from 'react';
+import { ErrorBoundary } from "react-error-boundary";
 import quickCartReducer from '../reducers/quick-cart-reducer.js';
 
 import MiniCart from './mini-cart.js';
@@ -150,17 +153,21 @@ export default function QuickCart (props) {
 
   return(
     <>
-      <MiniCart
-        cart={state.cart}
-        cartSize={state.cartSize}
-        cartOrder={state.cartOrder}
-        getNewPage={getSizesQtys}
-      />
-      <QuickAdd
-        sizes={state.sizes}
-        quantities={state.quantities}
-        addToCart={addToCart}
-      />
+      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+        <MiniCart
+          cart={state.cart}
+          cartSize={state.cartSize}
+          cartOrder={state.cartOrder}
+          getNewPage={getSizesQtys}
+        />
+      </ErrorBoundary>
+      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+        <QuickAdd
+          sizes={state.sizes}
+          quantities={state.quantities}
+          addToCart={addToCart}
+        />
+      </ErrorBoundary>
     </>
   );
 };
