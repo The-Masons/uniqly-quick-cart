@@ -18,7 +18,7 @@ export default function MiniCart (props) {
     hideCart(false);
   }, [state.viewClass]);
 
-  const stopHiding = () {
+  const stopHiding = () => {
     if (state.timeoutID) {
       clearTimeout(state.timeoutID);
     }
