@@ -8,7 +8,7 @@
   },
   "scripts": {
     "server-dev": "nodemon server/index.js",
-    "build": "rollup -c -o client/bundle.js",
+    "build": "rollup -c",
     "lint": "eslint ./",
     "test": "jest --coverage",
     "start": "node server/index.js"
@@ -34,6 +34,9 @@
     "@babel/preset-react": "^7.27.1",
     "@eslint/js": "^9.31.0",
     "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-replace": "^6.0.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "dotenv": "^17.2.1",

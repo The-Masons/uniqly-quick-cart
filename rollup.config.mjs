@@ -1,10 +1,25 @@
-import { babel } from '@rollup/plugin-babel';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 
-const config = {
-  input: 'public/index.js',
+export default {
+  input: 'client/index.js',
   output: {
-    dir: 'client/bundle.js',
+    file: 'public/bundle.js',
     format: 'es'
   },
-  plugins: [babel({ babelHelpers: 'bundled' })]
+  plugins: [
+    nodeResolve({
+      browser: true,
+    }),
+    commonjs({
+      include: [/node_modules/],
+    }),
+    babel({ babelHelpers: 'inline' }),
+    replace({
+      preventAssignment: true,
+      'process.env.NODE_ENV': '"development"',
+    }),
+  ],
 };
