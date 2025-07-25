@@ -71,7 +71,6 @@ fastify.get('/product/:productId/sizes_qtys', (req, res) => {
     if (err) {
       console.log('Seeding database...');
       if (err.code === '42P01') {
-        res.set();
         res
           .code(200)
           .headers({
