@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import QuickCart from './components/quick-cart.js';
 
-ReactDOM.render(<QuickCart item={parseInt(window.location.href.split('/').pop()) || 0} />, document.getElementById('quick-cart-app'));
+createRoot(document.getElementById('quick-cart-app'))
+	.render(<QuickCart item={parseInt(window.location.href.split('/').pop()) || 0} />);
