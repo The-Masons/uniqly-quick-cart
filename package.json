@@ -8,6 +8,7 @@
   },
   "scripts": {
     "server-dev": "nodemon server/index.js",
+    "build-dev": "rollup -c -w",
     "build": "rollup -c",
     "lint": "eslint ./",
     "test": "jest --coverage",
