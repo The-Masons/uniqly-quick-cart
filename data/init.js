@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Pool = require('pg').Pool;
 
 const pool = new Pool({
@@ -193,3 +194,5 @@ module.exports.populateProducts = populateProducts;
 module.exports.populateImages = populateImages;
 module.exports.populateProdsSizes = populateProdsSizes;
 module.exports.initDB = initDB;
+
+initDB();

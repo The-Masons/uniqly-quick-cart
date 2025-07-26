@@ -4,18 +4,9 @@ const fastify = require('fastify')({
 });
 const path = require('path');
 const db = require('../db/index');
-const mockData = require('../data/init');
 
 const hostname = `http://${process.env.HOSTNAME}` || 'http://localhost';
 const port = process.env.PORT || 3001;
-
-let seederCalled = false;
-const dbSeeder = () => {
-  if (!seederCalled) {
-    seederCalled = true;
-    mockData.initDB().catch(err => console.log(err));
-  }
-};
 
 fastify.register(require('@fastify/static'), {
   root: path.join(__dirname, '/../public'),
@@ -136,7 +127,6 @@ fastify.get('/product/:productId/addtocart', (req, res) => {
           .send(err);
       }
     } else {
-      seederCalled = false;
       res
         .code(200)
         .headers({
