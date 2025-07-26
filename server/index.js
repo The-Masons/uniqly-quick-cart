@@ -68,8 +68,7 @@ fastify.get('/product/:productId/sizes_qtys', (req, res) => {
             'Access-Control-Allow-Origin': hostname,
             'Content-Type': 'application/json',
           })
-          .send([{ size_name: 'Database Seeding...', quantity: 0 }]);
-        dbSeeder();
+          .send([{ size_name: 'Database empty.', quantity: 0 }]);
       } else {
         console.error(err);
         res
@@ -81,7 +80,6 @@ fastify.get('/product/:productId/sizes_qtys', (req, res) => {
           .send(err);
       }
     } else {
-      seederCalled = false;
       res
         .code(200)
         .headers({
@@ -114,8 +112,7 @@ fastify.get('/product/:productId/addtocart', (req, res) => {
             'Access-Control-Allow-Origin': hostname,
             'Content-Type': 'application/json',
           })
-          .send([{ size_name: 'Database Seeding...', quantity: 0 }]);
-        dbSeeder();
+          .send([{ size_name: 'Database empty.', quantity: 0 }]);
       } else {
         console.error(err);
         res
