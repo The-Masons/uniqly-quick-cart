@@ -1,12 +1,21 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import quickAddReducer from '../reducers/quick-add-reducer.js';
 
 export default function QuickAdd (props) {
   const [state, dispatch] = useReducer(quickAddReducer, {
-    currentSize: props.sizes[0],
-    currentQty: props.quantities[props.sizes[0]] > 0 ? 1 : 'Out of Stock',
-    buttonClass: props.quantities[props.sizes[0]] > 0 ? 'quickadd-btn' : 'quickadd-btn disabled',
+    currentSize: 'Size 0',
+    currentQty: 'Out of Stock',
+    buttonClass: 'quickadd-btn disabled',
   });
+
+  useEffect(() => {
+    dispatch({
+      type: 'init',
+      currentSize: props.sizes[0],
+      currentQty: props.quantities[props.sizes[0]] > 0 ? 1 : 'Out of Stock',
+      buttonClass: props.quantities[props.sizes[0]] > 0 ? 'quickadd-btn' : 'quickadd-btn disabled',
+    });
+  }, [props.sizes]);
 
   const handleSelect = e => {
     const newSize = e.target.form[0].value;
@@ -16,7 +25,7 @@ export default function QuickAdd (props) {
     if (e.target.classList[1] === 'quickadd-select-sizes') {
       newQty = props.quantities[newSize] > 0 ? 1 : 'Out of Stock';
     }
-
+    
     dispatch({
       type: 'select',
       currentSize: newSize,
