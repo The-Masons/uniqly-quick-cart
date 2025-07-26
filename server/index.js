@@ -60,7 +60,7 @@ fastify.get('/product/:productId/sizes_qtys', (req, res) => {
       WHERE products_sizes.product_id = $1 ORDER BY sizes.size_name;
     `, [req.params.productId], (err, data) => {
     if (err) {
-      console.log('Seeding database...');
+      console.log('Please run "node ./data/init.js" to seed the database.');
       if (err.code === '42P01') {
         res
           .code(200)
@@ -103,7 +103,7 @@ fastify.get('/product/:productId/addtocart', (req, res) => {
     `, [req.params.productId], (err, data) => {
     if (err) {
       if (err.code === '42P01') {
-        console.log('Seeding database...');
+        console.log('Please run "node ./data/init.js" to seed the database.');
         res.set({
           'Access-Control-Allow-Origin': hostname,
           'Content-Type': 'application/json',
