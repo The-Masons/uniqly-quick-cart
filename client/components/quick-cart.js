@@ -23,8 +23,8 @@ export default function QuickCart (props) {
     getSizesQtys(props.item);
   }, []);
 
-  const getSizesQtys = productId => {
-    fetch(`/product/${productId}/sizes_qtys`)
+  const getSizesQtys = () => {
+    fetch(`/product/${props.item}/sizes_qtys`)
       .then(res => {
         if (res.ok) {
           if (res.status === 200) {
@@ -88,7 +88,7 @@ export default function QuickCart (props) {
   };
 
   const addToCart = (size, quantity) => {
-    fetch(`/product/${productId}/addtocart`)
+    fetch(`/product/${props.item}/addtocart`)
       .then(res => {
         if (res.ok) {
           if (res.status === 200) {
@@ -107,7 +107,7 @@ export default function QuickCart (props) {
         }
       })
       .then(data => {
-        if (Object.isObject(data)) {        
+        if (Array.isArray(data)) {        
           const newCart = Object.assign({}, state.cart);
           const cartKey = state.item + ' ' + size;
           if (state.cart.hasOwnProperty(cartKey)) {
@@ -140,6 +140,7 @@ export default function QuickCart (props) {
             });
           }
         } else {
+          console.dir(data)
           dispatch({
             type: 'error_server',
             error: `Server responded with an unexpected payload.`,
