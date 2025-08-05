@@ -1,12 +1,14 @@
+const updateState = (state, action) => {
+	currentSize: action.currentSize || state.currentSize,
+	currentQty: action.currentQty || state.currentQty,
+  buttonClass: action.buttonClass || state.buttonClass,
+};
+
 export default function quickAddReducer(state, action) {
 	switch (action.type) {
 		case 'init':
 		case 'select':
-			return {
-				currentSize: action.currentSize,
-      	currentQty: action.currentQty,
-     	  buttonClass: action.buttonClass,
-			};
+			return updateState(state, action);
 		default:
 			break;
 	}
