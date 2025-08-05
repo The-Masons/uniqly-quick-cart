@@ -1,10 +1,4 @@
-import { useEffect } from 'react';
-
 export default function MiniCart (props) {
-  useEffect(() => {
-    props.hideCart(false);
-  }, [props.viewClass]);
-
   const calculateTotal = () => {
     let sum = 0;
     for (let key in props.cart) {

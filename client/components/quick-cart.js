@@ -139,6 +139,7 @@ export default function QuickCart (props) {
               viewClass: 'minicart-view',
             });
           }
+          hideCart(false);
         } else {
           console.dir(data)
           dispatch({
@@ -156,18 +157,21 @@ export default function QuickCart (props) {
   }
 
   const showCart = () => {
+    const newViewClass = state.cartSize ? 'minicart-view' : 'minicart-view empty';
+
     if (state.timeoutID) {
       clearTimeout(state.timeoutID);
     }
-
     dispatch({
       type: 'show_mini_cart',
-      viewClass: state.viewClass.replace(' hidden', ''),
+      viewClass: newViewClass,
       timeoutID: '',
     });
   };
 
   const hideCart = isImmediate => {
+    const newViewClass = state.cartSize ? 'minicart-view hidden' : 'minicart-view empty hidden';
+
     // Reset the timeout on consecutive calls
     if (state.timeoutID) {
       clearTimeout(state.timeoutID);
@@ -176,16 +180,15 @@ export default function QuickCart (props) {
     if (isImmediate) {
       dispatch({
         type: 'hide_immediate',
-        viewClass: `${state.viewClass} hidden`,
+        viewClass: newViewClass,
         timeoutID: '',
       });
     } else {
       const newTimeoutID = setTimeout(() => dispatch({
         type: 'hide_immediate',
-        viewClass: `${state.viewClass} hidden`,
+        viewClass: newViewClass,
         timeoutID: '',
       }), 5000);
-
       dispatch({
         type: 'hide_timeout',
         timeoutID: newTimeoutID,
