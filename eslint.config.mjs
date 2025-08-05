@@ -14,7 +14,7 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([globalIgnores(["client/bundle.js", "**/node_modules", "**/coverage"]), {
-    extends: compat.extends("airbnb"),
+    extends: compat.extends("google"),
 
     languageOptions: {
         globals: {
