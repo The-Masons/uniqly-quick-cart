@@ -10,7 +10,7 @@ export default function quickCartReducer(state, action) {
 		    viewClass: state.viewClass,
    		  timeoutID: state.timeoutID,
 			};
-		case 'update_qtys':
+		case 'update_quantity':
 			return {
 				sizes: state.sizes,
         quantities: state.quantities,
