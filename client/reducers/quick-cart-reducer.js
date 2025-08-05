@@ -1,4 +1,4 @@
-const updatedState = (state, action) => {
+const updatedState = (state, action) => ({
 	sizes: action.sizes || state.sizes,
   quantities: action.quantities || state.quantities,
   cart: action.cart || state.cart,
@@ -6,7 +6,7 @@ const updatedState = (state, action) => {
   cartSize: action.cartSize || state.cartSize,
   viewClass: action.viewClass || state.viewClass,
   timeoutID: action.timeoutID || state.timeoutID,
-};
+});
 
 export default function quickCartReducer(state, action) {
 	switch (action.type) {
