@@ -109,7 +109,7 @@ export default function QuickCart (props) {
       .then(data => {
         if (Array.isArray(data)) {        
           const newCart = Object.assign({}, state.cart);
-          const cartKey = state.item + ' ' + size;
+          const cartKey = props.item + ' ' + size;
           if (state.cart.hasOwnProperty(cartKey)) {
             newCart[cartKey].quantity += parseInt(quantity);
             const newCartSize = state.cartSize + parseInt(quantity);
@@ -120,7 +120,7 @@ export default function QuickCart (props) {
             });
           } else {
             newCart[cartKey] = {
-              id: state.item,
+              id: props.item,
               name: data[0].name_name,
               color: data[0].color_name,
               quantity: parseInt(quantity),
