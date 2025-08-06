@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const fastify = require('fastify')({
   logger: true,
 });
@@ -23,6 +23,16 @@ fastify.get('/styles.css', (req, res) => {
     .sendFile('styles.css');
 });
 
+fastify.get('/reset.css', (req, res) => {
+  res
+    .code(200)
+    .headers({
+      'Access-Control-Allow-Origin': hostname,
+      'Content-Type': 'test/css',
+    })
+    .sendFile('reset.css');
+});
+
 fastify.get('/bundle.js', (req, res) => {
   res
     .code(200)
@@ -38,7 +48,7 @@ fastify.get('/', (req, res) => {
     .code(302)
     .headers({
       'Access-Control-Allow-Origin': hostname,
-      'Location': '/product/0',
+      Location: '/product/0',
     })
     .redirect('/product/0');
 });
@@ -135,7 +145,7 @@ fastify.get('/product/:productId/addtocart', (req, res) => {
   });
 });
 
-fastify.listen({ port }, err => {
+fastify.listen({ port }, (err) => {
   if (err) {
     fastify.log.error(err);
     process.exit(1);

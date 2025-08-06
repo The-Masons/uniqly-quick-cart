@@ -14,9 +14,8 @@ describe('query', () => {
     const poolQuery = Pool.prototype.query;
     const expectedQuery = 'SELECT foo FROM bar';
 
-    return db.query(expectedQuery, [], () => {}).then(() =>
-      expect(poolQuery.mock.calls[0][0].split(' ').filter(word => word !== ''))
-        .toEqual(expectedQuery.split(' ').filter(word => word !== ''), [0]));
+    return db.query(expectedQuery, [], () => {}).then(() => expect(poolQuery.mock.calls[0][0].split(' ').filter((word) => word !== ''))
+      .toEqual(expectedQuery.split(' ').filter((word) => word !== ''), [0]));
   });
 
   test('should invoke a callback on the returned data', () => {

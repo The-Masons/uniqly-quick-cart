@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from 'react';
-import quickAddReducer from '../reducers/quick-add-reducer.js';
+import quickAddReducer from '../reducers/quick-add-reducer';
 
-export default function QuickAdd (props) {
+export default function QuickAdd({ sizes, quantities, addToCart }) {
   const [state, dispatch] = useReducer(quickAddReducer, {
     currentSize: 'Size 0',
     currentQty: 'Out of Stock',
@@ -11,21 +11,21 @@ export default function QuickAdd (props) {
   useEffect(() => {
     dispatch({
       type: 'init',
-      currentSize: props.sizes[0],
-      currentQty: props.quantities[props.sizes[0]] > 0 ? 1 : 'Out of Stock',
-      buttonClass: props.quantities[props.sizes[0]] > 0 ? 'quickadd-btn' : 'quickadd-btn disabled',
+      currentSize: sizes[0],
+      currentQty: quantities[sizes[0]] > 0 ? 1 : 'Out of Stock',
+      buttonClass: quantities[sizes[0]] > 0 ? 'quickadd-btn' : 'quickadd-btn disabled',
     });
-  }, [props.sizes]);
+  }, [sizes]);
 
-  const handleSelect = e => {
+  const handleSelect = (e) => {
     const newSize = e.target.form[0].value;
-    const newButtonClass = props.quantities[newSize] > 0 ? 'quickadd-btn' : 'quickadd-btn disabled';
+    const newButtonClass = quantities[newSize] > 0 ? 'quickadd-btn' : 'quickadd-btn disabled';
 
     let newQty = e.target.form[1].value;
     if (e.target.classList[1] === 'quickadd-select-sizes') {
-      newQty = props.quantities[newSize] > 0 ? 1 : 'Out of Stock';
+      newQty = quantities[newSize] > 0 ? 1 : 'Out of Stock';
     }
-    
+
     dispatch({
       type: 'select',
       currentSize: newSize,
@@ -34,35 +34,35 @@ export default function QuickAdd (props) {
     });
   };
 
-  const handleAdd = e => {
+  const handleAdd = (e) => {
     e.preventDefault();
     const size = state.currentSize;
     const qty = state.currentQty;
     if (qty !== 'Out of Stock') {
-      props.addToCart(size, qty);
+      addToCart(size, qty);
     }
   };
 
-  const generateSizes = sizes => {
+  const generateSizes = () => {
     const results = [];
     for (let i = 0; i < sizes.length; i += 1) {
       results.push(
-        <option key={`sizeOpt${i}`}>{sizes[i]}</option>
+        <option key={`sizeOpt${i}`}>{sizes[i]}</option>,
       );
     }
     return results;
   };
 
-  const generateQtys = currSize => {
+  const generateQtys = (currSize) => {
     const results = [];
-    const quantity = props.quantities[currSize] < 99 ? props.quantities[currSize] : 99;
+    const quantity = quantities[currSize] < 99 ? quantities[currSize] : 99;
     for (let i = 0; i < quantity; i += 1) {
       results.push(
-        <option key={`qtyOpt${i}`}>{i + 1}</option>
+        <option key={`qtyOpt${i}`}>{i + 1}</option>,
       );
     }
     return results.length > 0 ? results : <option>Out of Stock</option>;
-  }
+  };
 
   return (
     <div className="quickadd">
@@ -71,18 +71,27 @@ export default function QuickAdd (props) {
           <select
             className="quickadd-dropdown quickadd-select-sizes"
             onChange={handleSelect}
-            value={state.currentSize}>
-            {generateSizes(props.sizes)}
+            value={state.currentSize}
+          >
+            {generateSizes(sizes)}
           </select>
           <select
             className="quickadd-dropdown quickadd-select-quantity"
             onChange={handleSelect}
-            value={state.currentQty}>
+            value={state.currentQty}
+          >
             {generateQtys(state.currentSize)}
           </select>
         </div>
-        <button className={state.buttonClass} onClick={handleAdd}>ADD TO BAG</button>
+        <button
+          className={state.buttonClass}
+          onClick={handleAdd}
+          onKeyPress={(e) => { if (e.key === 'Enter') { handleAdd(e); } }}
+          type="button"
+        >
+          ADD TO BAG
+        </button>
       </form>
     </div>
   );
-};
+}

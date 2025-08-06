@@ -1,4 +1,4 @@
-const Pool = require('pg').Pool;
+const { Pool } = require('pg');
 
 const pool = new Pool({
   host: process.env.PGHOST,
@@ -13,13 +13,12 @@ pool.on('error', (err) => {
   process.exit(-1);
 });
 
-const query = (queryText, queryArgs, callback) =>
-  pool.query(queryText, queryArgs)
-    .then((res) => {
-      callback(null, res.rows);
-    })
-    .catch((err) => {
-      callback(err, null);
-    });
+const query = (queryText, queryArgs, callback) => pool.query(queryText, queryArgs)
+  .then((res) => {
+    callback(null, res.rows);
+  })
+  .catch((err) => {
+    callback(err, null);
+  });
 
 module.exports.query = query;

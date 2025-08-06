@@ -1,33 +1,47 @@
-export default function MiniCart (props) {
-  const calculateTotal = () => {
-    let sum = 0;
-    for (let key in props.cart) {
-      sum += props.cart[key].price * props.cart[key].quantity;
-    }
-    return sum;
-  };
+import React from 'react';
 
-  const generateMiniCart = cartSize => {
+export default function MiniCart({ cart, cartOrder, cartSize, getNewPage, hideCart, showCart, viewClass }) {
+  const calculateTotal = () => Object.keys(cart).reduce(
+    (sum, key) => sum + cart[key].price * cart[key].quantity,
+    0,
+  );
+
+  const generateMiniCart = () => {
     if (cartSize > 0) {
       const newCart = [];
 
-      for (let i = 0; i < props.cartOrder.length; i += 1) {
-        const currItem = props.cartOrder[i];
+      for (let i = 0; i < cartOrder.length; i += 1) {
+        const currItem = cartOrder[i];
         newCart.push(
           <div className="cart-item" key={`cartItem${i}`}>
-            <img className="cart-item-img" src={props.cart[currItem].imgUrl}/>
+            <img className="cart-item-img" alt={`This is a fake product called item${i}`} src={cart[currItem].imgUrl} />
             <div className="cart-item-info">
-              <span
+              <button
                 className="cart-item-info name"
-                onClick={props.getNewPage.bind(null, props.cart[currItem].id)}>
-                {props.cart[currItem].name}
+                onClick={getNewPage.bind(null, cart[currItem].id)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { getNewPage(cart[currItem].id); } }}
+                type="button"
+              >
+                {cart[currItem].name}
+              </button>
+              <span className="cart-item-info qty">
+                Quantity:
+                {cart[currItem].quantity}
               </span>
-              <span className="cart-item-info qty">Quantity: {props.cart[currItem].quantity}</span>
-              <span className="cart-item-info color">Color: {props.cart[currItem].color}</span>
-              <span className="cart-item-info size">Size: {props.cart[currItem].size}</span>
+              <span className="cart-item-info color">
+                Color:
+                {cart[currItem].color}
+              </span>
+              <span className="cart-item-info size">
+                Size:
+                {cart[currItem].size}
+              </span>
             </div>
-            <span className="cart-item-price">${props.cart[currItem].price / 100}</span>
-          </div>
+            <span className="cart-item-price">
+              $
+              {cart[currItem].price / 100}
+            </span>
+          </div>,
         );
       }
 
@@ -36,31 +50,50 @@ export default function MiniCart (props) {
           {newCart}
         </div>,
         <div className="minicart-total" key="cartTotal">
-          <span className="total-item-count">TOTAL ({props.cartSize} ITEMS)</span>
-          <span className="total-subtotal">${calculateTotal() / 100}</span>
+          <span className="total-item-count">
+            TOTAL (
+            {cartSize}
+            {' '}
+            ITEMS)
+          </span>
+          <span className="total-subtotal">
+            $
+            {calculateTotal() / 100}
+          </span>
         </div>,
         <div className="minicart-cart-controls" key="cartControls">
-          <button className="minicart-view-cart-btn">VIEW BAG</button>
-          <button className="minicart-checkout-btn">CHECKOUT</button>
+          <button className="minicart-view-cart-btn" type="button">VIEW BAG</button>
+          <button className="minicart-checkout-btn" type="button">CHECKOUT</button>
         </div>,
-        <span className="minicart-close-btn" key="closeBag" onClick={props.hideCart.bind(null, true)}>CLOSE BAG</span>,
+        <button
+          className="minicart-close-btn"
+          key="closeBag"
+          onClick={hideCart.bind(null, true)}
+          onKeyDown={(e) => { if (e.key === 'Enter') { hideCart(true); } }}
+          type="button"
+        >
+          CLOSE BAG
+        </button>,
       ];
-    } else {
-      return 'YOUR BAG IS EMPTY';
     }
+    return 'YOUR BAG IS EMPTY';
   };
 
   return (
     <div className="minicart">
-      <div className="minicart-icon"
-          onMouseEnter={props.showCart}
-          onMouseLeave={props.hideCart.bind(null, false)}>
-        <span>{props.cartSize}</span>
+      <div
+        className="minicart-icon"
+        onMouseEnter={showCart}
+        onMouseLeave={hideCart.bind(null, false)}
+      >
+        <span>{cartSize}</span>
       </div>
-      <div className={props.viewClass}
-        onMouseEnter={props.showCart}
-        onMouseLeave={props.hideCart.bind(null, false)}>
-        {generateMiniCart(props.cartSize)}
+      <div
+        className={viewClass}
+        onMouseEnter={showCart}
+        onMouseLeave={hideCart.bind(null, false)}
+      >
+        {generateMiniCart()}
       </div>
     </div>
   );

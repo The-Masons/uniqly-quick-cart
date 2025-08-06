@@ -4,16 +4,18 @@ import QuickAdd from './quick-add.jsx';
 describe('QuickAdd', () => {
   test('should populate dropdowns with given data', () => {
     const quickAdd = mount(
-      <QuickAdd sizes={[
-        'Fake Size 0',
-        'Fake Size 1',
-        'Fake Size 2',
-      ]}
-      quantities={{
-        'Fake Size 0': 10,
-        'Fake Size 1': 11,
-        'Fake Size 2': 12,
-      }}/>
+      <QuickAdd
+        sizes={[
+          'Fake Size 0',
+          'Fake Size 1',
+          'Fake Size 2',
+        ]}
+        quantities={{
+          'Fake Size 0': 10,
+          'Fake Size 1': 11,
+          'Fake Size 2': 12,
+        }}
+      />,
     );
 
     expect(quickAdd).toMatchSnapshot();
@@ -21,20 +23,23 @@ describe('QuickAdd', () => {
 
   test('should populate quantity dropdown with the correct number of options', () => {
     const quickAdd = mount(
-      <QuickAdd sizes={[
-        'Fake Size 0',
-        'Fake Size 1',
-        'Fake Size 2',
-      ]}
-      quantities={{
-        'Fake Size 0': 10,
-        'Fake Size 1': 11,
-        'Fake Size 2': 12,
-      }}/>
+      <QuickAdd
+        sizes={[
+          'Fake Size 0',
+          'Fake Size 1',
+          'Fake Size 2',
+        ]}
+        quantities={{
+          'Fake Size 0': 10,
+          'Fake Size 1': 11,
+          'Fake Size 2': 12,
+        }}
+      />,
     );
 
     expect(quickAdd.find('.quickadd-select-quantity').children().length).toEqual(10);
-    quickAdd.find('.quickadd-select-sizes').simulate('change',
+    quickAdd.find('.quickadd-select-sizes').simulate(
+      'change',
       {
         target: {
           form: [
@@ -46,26 +51,30 @@ describe('QuickAdd', () => {
             'quickadd-select-sizes',
           ],
         },
-      });
+      },
+    );
     expect(quickAdd.state('currentSize')).toEqual('Fake Size 2');
     expect(quickAdd.find('.quickadd-select-quantity').children().length).toEqual(12);
   });
 
   test('should update state according to form values', () => {
     const quickAdd = mount(
-      <QuickAdd sizes={[
-        'Fake Size 0',
-        'Fake Size 1',
-        'Fake Size 2',
-      ]}
-      quantities={{
-        'Fake Size 0': 10,
-        'Fake Size 1': 11,
-        'Fake Size 2': 12,
-      }}/>
+      <QuickAdd
+        sizes={[
+          'Fake Size 0',
+          'Fake Size 1',
+          'Fake Size 2',
+        ]}
+        quantities={{
+          'Fake Size 0': 10,
+          'Fake Size 1': 11,
+          'Fake Size 2': 12,
+        }}
+      />,
     );
 
-    quickAdd.find('.quickadd-select-sizes').simulate('change',
+    quickAdd.find('.quickadd-select-sizes').simulate(
+      'change',
       {
         target: {
           form: [
@@ -77,10 +86,12 @@ describe('QuickAdd', () => {
             'quickadd-select-quantity',
           ],
         },
-      });
+      },
+    );
     expect(quickAdd.state('currentSize')).toEqual('Fake Size 0');
     expect(quickAdd.state('currentQty')).toEqual(3);
-    quickAdd.find('.quickadd-select-sizes').simulate('change',
+    quickAdd.find('.quickadd-select-sizes').simulate(
+      'change',
       {
         target: {
           form: [
@@ -92,7 +103,8 @@ describe('QuickAdd', () => {
             'quickadd-select-size',
           ],
         },
-      });
+      },
+    );
     expect(quickAdd.state('currentSize')).toEqual('Fake Size 1');
     expect(quickAdd.state('currentQty')).toEqual(1);
   });
@@ -100,16 +112,18 @@ describe('QuickAdd', () => {
   test('should handle out of stock items', () => {
     const mockAdd = jest.fn();
     const quickAdd = mount(
-      <QuickAdd sizes={[
-        'Fake Size 0',
-        'Fake Size 1',
-        'Fake Size 2',
-      ]}
-      quantities={{
-        'Fake Size 0': 0,
-        'Fake Size 1': 0,
-        'Fake Size 2': 0,
-      }}/>
+      <QuickAdd
+        sizes={[
+          'Fake Size 0',
+          'Fake Size 1',
+          'Fake Size 2',
+        ]}
+        quantities={{
+          'Fake Size 0': 0,
+          'Fake Size 1': 0,
+          'Fake Size 2': 0,
+        }}
+      />,
     );
 
     expect(quickAdd.state('currentQty')).toEqual('Out of Stock');
@@ -121,17 +135,19 @@ describe('QuickAdd', () => {
   test('should add an item to the cart when "ADD TO BAG" is clicked', () => {
     const mockAdd = jest.fn();
     const quickAdd = mount(
-      <QuickAdd sizes={[
-        'Fake Size 0',
-        'Fake Size 1',
-        'Fake Size 2',
-      ]}
-      quantities={{
-        'Fake Size 0': 10,
-        'Fake Size 1': 11,
-        'Fake Size 2': 12,
-      }}
-      addToCart={mockAdd}/>
+      <QuickAdd
+        sizes={[
+          'Fake Size 0',
+          'Fake Size 1',
+          'Fake Size 2',
+        ]}
+        quantities={{
+          'Fake Size 0': 10,
+          'Fake Size 1': 11,
+          'Fake Size 2': 12,
+        }}
+        addToCart={mockAdd}
+      />,
     );
 
     quickAdd.find('.quickadd-btn').simulate('click');

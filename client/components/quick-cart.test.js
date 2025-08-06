@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import QuickCart from './quick-cart.jsx';
+
 jest.mock('jquery');
 
 QuickCart.prototype.renderComponents = jest.fn();
@@ -32,7 +33,7 @@ describe('QuickCart', () => {
       quickCart.instance().getSizesQtys(42);
 
       expect(quickCart.state('sizes')).toEqual(['ERROR']);
-      expect(quickCart.state('quantities')).toEqual({ERROR: -1});
+      expect(quickCart.state('quantities')).toEqual({ ERROR: -1 });
     });
 
     test('should update cart when a new item is added', () => {

@@ -1,5 +1,5 @@
 require('dotenv').config();
-const Pool = require('pg').Pool;
+const { Pool } = require('pg');
 
 const pool = new Pool({
   host: process.env.PGHOST,
@@ -56,44 +56,41 @@ const createTables = () => {
     const promises = [];
     for (let i = 0; i < 3; i += 1) {
       promises.push(pool.connect()
-        .then(client =>
-          client.query(tableQueries[i])
-            .then(() => {
-              client.release();
-            })
-            .catch((err) => {
-              client.release();
-              console.log(err.stack);
-            })));
-    }
-    return promises;
-  })())
-    .then(() => pool.connect()
-      .then(client =>
-        client.query(tableQueries[3])
+        .then((client) => client.query(tableQueries[i])
           .then(() => {
             client.release();
           })
           .catch((err) => {
             client.release();
-            console.log(err.stack);
-          })))
+            console.error(err.stack);
+          })));
+    }
+    return promises;
+  })())
+    .then(() => pool.connect()
+      .then((client) => client.query(tableQueries[3])
+        .then(() => {
+          client.release();
+        })
+        .catch((err) => {
+          client.release();
+          console.error(err.stack);
+        })))
     .then(() => Promise.all((() => {
       const promises = [];
       for (let i = 4; i < tableQueries.length; i += 1) {
         promises.push(pool.connect()
-          .then(client =>
-            client.query(tableQueries[i])
-              .then(() => {
-                client.release();
-              })
-              .catch((err) => {
-                client.release();
-                console.log(err.stack);
-              })));
+          .then((client) => client.query(tableQueries[i])
+            .then(() => {
+              client.release();
+            })
+            .catch((err) => {
+              client.release();
+              console.error(err.stack);
+            })));
       }
       return promises;
-    })())).catch(err => console.log(err));
+    })())).catch((err) => console.error(err));
 };
 
 const populateTwoField = (table, name, numRows) => {
@@ -103,13 +100,12 @@ const populateTwoField = (table, name, numRows) => {
     for (let i = 0; i < numRows; i += 1) {
       const entryName = `${name} ${i}`;
       promises.push(pool.connect()
-        .then(client =>
-          client.query(queryText, [i, entryName])
-            .then(() => client.release())
-            .catch((err) => {
-              client.release();
-              console.log(err.stack);
-            })));
+        .then((client) => client.query(queryText, [i, entryName])
+          .then(() => client.release())
+          .catch((err) => {
+            client.release();
+            console.error(err.stack);
+          })));
     }
     return promises;
   })());
@@ -120,19 +116,18 @@ const populateProducts = (numNames, numColors) => {
   const numRows = numNames * numColors;
   return Promise.all((() => {
     const promises = [];
-    let currName = 0;
-    let currColor = 0;
     for (let i = 0; i < numRows; i += 1) {
       promises.push(pool.connect()
         .then((client) => {
-          client.query(queryText, [i, currName, currColor, Math.floor(Math.random() * 10000)])
+          client.query(
+            queryText,
+            [i, Math.floor(i / numColors), i % numColors, Math.floor(Math.random() * 10000)],
+          )
             .then(() => client.release())
             .catch((err) => {
               client.release();
-              console.log(err.stack);
+              console.error(err.stack);
             });
-          currColor = currColor < numColors - 1 ? currColor + 1 : 0;
-          currName = currColor === 0 ? currName + 1 : currName;
         }));
     }
     return promises;
@@ -145,13 +140,12 @@ const populateImages = (numRows) => {
     const promises = [];
     for (let i = 0; i < numRows; i += 1) {
       promises.push(pool.connect()
-        .then(client =>
-          client.query(queryText, [i, 'https://placehold.co/250', i, true])
-            .then(() => client.release())
-            .catch((err) => {
-              client.release();
-              console.log(err.stack);
-            })));
+        .then((client) => client.query(queryText, [i, 'https://placehold.co/250', i, true])
+          .then(() => client.release())
+          .catch((err) => {
+            client.release();
+            console.error(err.stack);
+          })));
     }
     return promises;
   })());
@@ -164,29 +158,30 @@ const populateProdsSizes = (numProds, numSizes) => {
     for (let currProd = 0; currProd < numProds; currProd += 1) {
       for (let currSize = 0; currSize < numSizes; currSize += 1) {
         promises.push(pool.connect()
-          .then(client =>
-            client.query(queryText, [currProd, currSize, Math.floor(Math.random() * 150)])
-              .then(() => client.release())
-              .catch((err) => {
-                client.release();
-                console.log(err);
-              })));
+          .then((client) => client.query(
+            queryText,
+            [currProd, currSize, Math.floor(Math.random() * 150)],
+          )
+            .then(() => client.release())
+            .catch((err) => {
+              client.release();
+              console.error(err);
+            })));
       }
     }
     return promises;
   })());
 };
 
-const initDB = () =>
-  createTables()
-    .then(() => populateTwoField('name', 'Product Name', 25))
-    .then(() => populateTwoField('color', 'Color', 4))
-    .then(() => populateTwoField('size', 'Size', 5))
-    .then(() => populateProducts(25, 4))
-    .then(() => populateImages(100))
-    .then(() => populateProdsSizes(100, 5))
-    .then(() => console.log('All tables populated'))
-    .catch(err => console.log(err));
+const initDB = () => createTables()
+  .then(() => populateTwoField('name', 'Product Name', 25))
+  .then(() => populateTwoField('color', 'Color', 4))
+  .then(() => populateTwoField('size', 'Size', 5))
+  .then(() => populateProducts(25, 4))
+  .then(() => populateImages(100))
+  .then(() => populateProdsSizes(100, 5))
+  .then(() => console.log('All tables populated'))
+  .catch((err) => console.error(err));
 
 module.exports.createTables = createTables;
 module.exports.populateTwoField = populateTwoField;

@@ -56,8 +56,8 @@ describe('createTables', () => {
     return initScripts.createTables().then(() => {
       expect(poolConnect).toHaveBeenCalledTimes(6);
       for (let i = 0; i < tableQueries.length; i += 1) {
-        expect(clientQuery.mock.calls[i][0].split(' ').filter(word => word !== ''))
-          .toEqual(tableQueries[i].split(' ').filter(word => word !== ''));
+        expect(clientQuery.mock.calls[i][0].split(' ').filter((word) => word !== ''))
+          .toEqual(tableQueries[i].split(' ').filter((word) => word !== ''));
       }
     });
   });
