@@ -1,6 +1,14 @@
 import React from 'react';
 
-export default function MiniCart({ cart, cartOrder, cartSize, getNewPage, hideCart, showCart, viewClass }) {
+export default function MiniCart({
+  cart,
+  cartOrder,
+  cartSize,
+  getNewPage,
+  hideCart,
+  showCart,
+  viewClass,
+}) {
   const calculateTotal = () => Object.keys(cart).reduce(
     (sum, key) => sum + cart[key].price * cart[key].quantity,
     0,
