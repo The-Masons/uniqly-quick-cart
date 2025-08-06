@@ -18,7 +18,6 @@ export default function QuickCart (props) {
     timeoutID: '',
   });
 
-  // Fetch item info from the server
   useEffect(() => {
     getSizesQtys(props.item);
   }, []);
