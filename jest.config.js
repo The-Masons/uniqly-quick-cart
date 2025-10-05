@@ -1,5 +1,5 @@
 const config = {
-  setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
+  setupFilesAfterEnv: ['./test/jestsetup.js'],
   verbose: true,
 };
 
