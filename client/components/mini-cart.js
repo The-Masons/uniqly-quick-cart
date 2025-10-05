@@ -14,6 +14,18 @@ export default function MiniCart({
     0,
   );
 
+  const displayPrice = (price) => {
+    let priceStr = (price / 100).toString(10);
+    const decIndex = priceStr.indexOf('.');
+    if (decIndex === -1) {
+      priceStr += '.00';
+    } else if (decIndex === priceStr.length - 2) {
+      priceStr += '0';
+    }
+    console.log(priceStr);
+    return priceStr;
+  };
+
   const generateMiniCart = () => {
     if (cartSize > 0) {
       const newCart = [];
@@ -47,7 +59,7 @@ export default function MiniCart({
             </div>
             <span className="cart-item-price">
               $
-              {cart[currItem].price / 100}
+              {displayPrice(cart[currItem].price)}
             </span>
           </div>,
         );
@@ -66,7 +78,7 @@ export default function MiniCart({
           </span>
           <span className="total-subtotal">
             $
-            {calculateTotal() / 100}
+            {displayPrice(calculateTotal())}
           </span>
         </div>,
         <div className="minicart-cart-controls" key="cartControls">
