@@ -1,4 +1,4 @@
-const Pool = jest.genMockFromModule('pg-pool');
+const pg = jest.createMockFromModule('pg');
 
 const mockQuery = jest.fn().mockReturnValue(new Promise((resolve) => resolve()));
 
@@ -11,9 +11,9 @@ const connect = jest.fn().mockReturnValue(new Promise((resolve) => resolve({
 
 const query = jest.fn().mockReturnValue(new Promise((resolve) => resolve()));
 
-Pool.prototype.query = query;
-Pool.prototype.connect = connect;
-Pool.prototype.mockQuery = mockQuery;
-Pool.prototype.mockRelease = mockRelease;
+pg.Pool.prototype.query = query;
+pg.Pool.prototype.connect = connect;
+pg.Pool.prototype.mockQuery = mockQuery;
+pg.Pool.prototype.mockRelease = mockRelease;
 
-module.exports = Pool;
+module.exports = pg;

@@ -1,10 +1,9 @@
-const Pool = require('pg-pool');
-const initScripts = require('./init.js');
+const { Pool } = require('pg');
+const initScripts = require('./init.lib.js');
 
-jest.mock('pg-pool');
+jest.mock('pg');
 
 beforeEach(() => {
-  Pool.mockClear();
   Pool.prototype.connect.mockClear();
   Pool.prototype.mockQuery.mockClear();
   Pool.prototype.mockRelease.mockClear();
@@ -99,10 +98,10 @@ describe('populateProducts', () => {
     const pool = new Pool();
     const clientQuery = Pool.prototype.mockQuery;
     const queryText = 'INSERT INTO products(product_id, name_id, color_id, price) VALUES($1, $2, $3, $4)';
-    Math.floor = jest.fn().mockReturnValue(42);
+    Math.random = jest.fn().mockReturnValue(1);
 
     return initScripts.populateProducts(1, 1).then(() => expect(clientQuery)
-      .toHaveBeenCalledWith(queryText, [0, 0, 0, 42]));
+      .toHaveBeenCalledWith(queryText, [0, 0, 0, 10000]));
   });
 
   test('should query the db the correct amount of times', () => {
@@ -127,7 +126,7 @@ describe('populateImages', () => {
     const queryText = 'INSERT INTO images(img_id, img_url, product_id, isPrimary) VALUES($1, $2, $3, $4)';
 
     return initScripts.populateImages(1).then(() => expect(clientQuery)
-      .toHaveBeenCalledWith(queryText, [0, 'http://placecorgi.com/250', 0, true]));
+      .toHaveBeenCalledWith(queryText, [0, 'https://placehold.co/250', 0, true]));
   });
 
   test('should query the db the correct amount of times', () => {
@@ -150,10 +149,10 @@ describe('populateProdsSizes', () => {
     const pool = new Pool();
     const clientQuery = Pool.prototype.mockQuery;
     const queryText = 'INSERT INTO products_sizes(product_id, size_id, quantity) VALUES($1, $2, $3)';
-    Math.floor = jest.fn().mockReturnValue(42);
+    Math.random = jest.fn().mockReturnValue(1);
 
     return initScripts.populateProdsSizes(1, 1).then(() => expect(clientQuery)
-      .toHaveBeenCalledWith(queryText, [0, 0, 42]));
+      .toHaveBeenCalledWith(queryText, [0, 0, 150]));
   });
 
   test('should query the db the correct amount of times', () => {

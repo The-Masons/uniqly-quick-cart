@@ -1,10 +1,9 @@
-const Pool = require('pg-pool');
+const { Pool } = require('pg');
 const db = require('./index.js');
 
-jest.mock('pg-pool');
+jest.mock('pg');
 
 beforeEach(() => {
-  Pool.mockClear();
   Pool.prototype.query.mockClear();
 });
 
